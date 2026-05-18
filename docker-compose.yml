@@ -1,0 +1,36 @@
+services:
+  mongo:
+    image: mongo:6.0
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    restart: unless-stopped
+    environment:
+      - MONGODB_URI=mongodb://akshat2005singh_db_user:akshat123@ac-6btavu8-shard-00-00.tqbjlrn.mongodb.net:27017,ac-6btavu8-shard-00-01.tqbjlrn.mongodb.net:27017,ac-6btavu8-shard-00-02.tqbjlrn.mongodb.net:27017/?ssl=true&replicaSet=atlas-12f8ce-shard-0&authSource=admin&appName=Cluster0
+      - JWT_SECRET=VCYKkJ1zd9nfLdfT59BcwBWkHItIozzWnqnNNit6Hfl
+      - PORT=4000
+    ports:
+      - '4000:4000'
+    depends_on:
+      - mongo
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    restart: unless-stopped
+    ports:
+      - '5173:80'
+    environment:
+      - VITE_API_URL=http://localhost:4000
+
+volumes:
+  mongo-data:
+    driver: local

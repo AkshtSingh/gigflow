@@ -252,6 +252,4 @@ If you cannot log in:
 - Verify the MongoDB connection in `server/.env`
 - Make sure the frontend is pointing at the correct API URL
 
-## License
 
-No license has been specified for this project.

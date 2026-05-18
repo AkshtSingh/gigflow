@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Oswald', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  background: #fbf8fa;
+  color: #1b1b1d;
+}
+
+.oswald {
+  font-family: 'Oswald', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+html.dark body {
+  background: #0d0e17;
+  color: #e3e1e6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: rgba(96, 99, 238, 0.18);
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+/* Dark mode styles for Tailwind classes */
+html.dark {
+  /* General elements */
+  background-color: #0d0e17 !important;
+  color: #e3e1e6 !important;
+}
+
+html.dark * {
+  --tw-bg-opacity: 1;
+  --tw-text-opacity: 1;
+}
+
+html.dark [class*='bg-surface-container-lowest'] {
+  background-color: #1a1b25 !important;
+}
+
+html.dark [class*='bg-surface-container-low'] {
+  background-color: #16171f !important;
+}
+
+html.dark [class*='bg-surface-container'] {
+  background-color: #1f2028 !important;
+}
+
+html.dark [class*='bg-surface'] {
+  background-color: #0d0e17 !important;
+}
+
+html.dark [class*='border-outline'] {
+  border-color: #49484e !important;
+}
+
+html.dark [class*='text-on-surface'] {
+  color: #e3e1e6 !important;
+}
+
+html.dark [class*='text-surface'] {
+  color: #e3e1e6 !important;
+}
+
+html.dark button,
+html.dark [role='button'] {
+  background-color: inherit;
+  color: inherit;
+}
+
+/* Card and container styles */
+html.dark > *,
+html.dark body > *,
+html.dark body * {
+  background-color: inherit;
+  border-color: inherit;
+  color: inherit;
+}
