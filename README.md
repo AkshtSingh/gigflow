@@ -59,16 +59,6 @@ If you want to override it, set:
 VITE_API_URL=http://localhost:4000
 ```
 
-## Default Seed Accounts
-
-Run the seed script to create sample users and demo leads.
-
-- Admin: `seed.admin@example.com`
-- Sales: `seed.user@example.com`
-- Password for both: `password123`
-
-The seed also inserts 20 demo leads owned by the sales user.
-
 ## Getting Started Locally
 
 ### 1. Install dependencies
@@ -89,13 +79,7 @@ Use either:
 - A MongoDB Atlas connection string
 - Docker, if you prefer containerized MongoDB
 
-### 4. Seed demo data
-
-```bash
-npm run seed --workspace server
-```
-
-### 5. Start the app in development mode
+### 4. Start the app in development mode
 
 ```bash
 npm run dev
@@ -126,13 +110,11 @@ npm run start
 npm run dev --workspace server
 npm run build --workspace server
 npm run start --workspace server
-npm run seed --workspace server
 ```
 
 - `dev` - hot-reload API server
 - `build` - compile TypeScript to `dist/`
 - `start` - run the compiled server
-- `seed` - populate demo users and leads
 
 ### Client
 
@@ -213,10 +195,6 @@ docker compose down -v
 - `PATCH /api/leads/:leadId`
 - `DELETE /api/leads/:leadId`
 
-### Admin
-
-- `POST /api/admin/reseed`
-
 ## Feature Notes
 
 ### Authentication
@@ -229,7 +207,6 @@ docker compose down -v
 
 - `admin` users can see all leads.
 - `sales` users can see and manage only their own leads.
-- The admin reseed endpoint is protected and requires the `admin` role.
 
 ### Lead Management
 
@@ -269,11 +246,11 @@ If `docker compose` fails:
 
 ### Login Issues
 
-If you cannot log in after seeding:
+If you cannot log in:
 
-- Confirm the seed script completed successfully
-- Use `seed.admin@example.com` or `seed.user@example.com`
-- Use the password `password123`
+- Confirm the server is running
+- Verify the MongoDB connection in `server/.env`
+- Make sure the frontend is pointing at the correct API URL
 
 ## License
 
