@@ -1,3 +1,2 @@
 
-import { handler } from '../dist/serverless.js';
-export { handler };
+module.exports = require('../dist/serverless').handler;
