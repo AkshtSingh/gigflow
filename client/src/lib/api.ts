@@ -1,8 +1,8 @@
 import type { ApiEnvelope, AuthResponse, Lead, LeadFilters, LeadSummary, PaginatedLeadsResponse } from '../types/api';
 
 // Use a relative API base by default so the client works when served
-// from the same origin as the API (e.g. Vercel monorepo). Set
-// `VITE_API_URL` in production only if you need a different origin.
+// from the same origin as the API. Set `VITE_API_URL` in production
+// only if you need a different origin.
 const API_URL = import.meta.env.VITE_API_URL ?? '';
 
 type RequestOptions = RequestInit & {

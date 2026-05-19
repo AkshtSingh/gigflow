@@ -132,6 +132,61 @@ npm run preview --workspace client
 
 The repository includes a full Docker setup for MongoDB, the API server, and the client.
 
+### Docker Host Deployment
+
+If you want to run the app on a Docker host with a single public URL, use the host compose file and the Nginx reverse proxy.
+
+```bash
+docker compose -f docker-compose.host.yml up --build -d
+```
+
+This starts:
+- `server` on the internal Docker network
+- `client` on the internal Docker network
+- `proxy` on port `80`
+
+The proxy serves:
+- `/` -> client
+- `/api/*` -> server
+
+### Required Environment Variables for Docker Host
+
+Create a `.env` file in the repo root with:
+
+```env
+MONGODB_URI=mongodb+srv://USER:PASSWORD@cluster.mongodb.net/smart-leads
+JWT_SECRET=replace-with-a-long-random-secret
+CLIENT_ORIGIN=http://YOUR_SERVER_IP_OR_DOMAIN
+VITE_API_URL=
+```
+
+Notes:
+- `CLIENT_ORIGIN` should be the public URL where the proxy is reachable.
+- `VITE_API_URL` can stay empty because the client now defaults to relative `/api` requests.
+- If you are using a domain name, set `CLIENT_ORIGIN` to `https://your-domain.com`.
+- If you are using only an IP, set `CLIENT_ORIGIN` to `http://your-server-ip`.
+
+### Deploy to a Docker Host
+
+1. Install Docker and Docker Compose on your server.
+2. Copy the repository to the server.
+3. Create the root `.env` file with the values above.
+4. Run:
+
+```bash
+docker compose -f docker-compose.host.yml up --build -d
+```
+
+5. Open your server IP or domain in a browser.
+
+### Useful Docker Host Commands
+
+```bash
+docker compose -f docker-compose.host.yml ps
+docker compose -f docker-compose.host.yml logs -f
+docker compose -f docker-compose.host.yml down
+```
+
 ### Start Everything
 
 ```bash
@@ -251,5 +306,68 @@ If you cannot log in:
 - Confirm the server is running
 - Verify the MongoDB connection in `server/.env`
 - Make sure the frontend is pointing at the correct API URL
+
+## Render Deployment
+
+Render works well for this repo as two services:
+- `server/` as a Web Service
+- `client/` as a Static Site
+
+### Recommended Blueprint
+
+This repo includes a `render.yaml` blueprint at the root. You can import it into Render or create services manually.
+
+### Deploy the API
+
+1. Create a new Render **Web Service**.
+2. Connect your Git repository.
+3. Set **Root Directory** to `server`.
+4. Use these settings:
+	- Build Command: `npm install && npm run build`
+	- Start Command: `npm start`
+	- Environment: `Node`
+	- Plan: `Free`
+5. Add environment variables:
+	- `MONGODB_URI` = MongoDB Atlas connection string
+	- `JWT_SECRET` = a strong secret
+	- `CLIENT_ORIGIN` = the public URL of the frontend static site
+	- `PORT` = `10000` if you want to match the blueprint, or let Render inject it
+6. Deploy the service.
+
+### Deploy the Client
+
+1. Create a new Render **Static Site**.
+2. Set **Root Directory** to `client`.
+3. Use these settings:
+	- Build Command: `npm install && npm run build`
+	- Publish Directory: `dist`
+	- Plan: `Free`
+4. Add environment variable:
+	- `VITE_API_URL` = the public URL of the API service
+5. Deploy the site.
+
+### What to Put in the Environment Variables
+
+Example values:
+
+```env
+MONGODB_URI=mongodb+srv://USER:PASSWORD@cluster.mongodb.net/smart-leads
+JWT_SECRET=replace-with-a-long-random-secret
+CLIENT_ORIGIN=https://smart-leads-client.onrender.com
+VITE_API_URL=https://smart-leads-api.onrender.com
+```
+
+### Post-Deploy Checks
+
+Verify these URLs:
+
+```bash
+curl -i https://smart-leads-api.onrender.com/api/health
+curl -i https://smart-leads-client.onrender.com/
+```
+
+Expected results:
+- API returns JSON with `success: true`
+- Client returns the React app HTML, not a 404
 
 
