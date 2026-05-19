@@ -1,9 +1,9 @@
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 WORKDIR /app/client
 ARG VITE_API_URL=
 ENV VITE_API_URL=$VITE_API_URL
 COPY client/package.json ./package.json
-RUN npm install
+RUN npm install --fetch-retries=5 --fetch-retry-mintimeout=20000 --fetch-timeout=300000
 COPY client/ ./
 COPY tsconfig.base.json /app/tsconfig.base.json
 RUN npm run build
