@@ -1,5 +1,7 @@
 FROM node:18-alpine AS build
 WORKDIR /app/client
+ARG VITE_API_URL=
+ENV VITE_API_URL=$VITE_API_URL
 COPY client/package.json ./package.json
 RUN npm install
 COPY client/ ./
